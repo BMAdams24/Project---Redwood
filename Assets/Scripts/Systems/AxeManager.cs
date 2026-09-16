@@ -2,18 +2,18 @@ using UnityEngine;
 
 public class AxeManager : MonoBehaviour
 {
-    //Current axe level
-    public int axeLevel = 1;
+    //Current axe name
+    public string currentAxeName = "Rusty Axe";
 
-    //Current axe damage
+    //Current damage value
     public int axeDamage = 1;
 
-    //Upgrade the players axe
-    public void UpgradeAxe()
+    //purchase a new Axe
+    public void SetAxe(string axeName, int damage)
     {
-        axeLevel++;
-        axeDamage++;
+        currentAxeName = axeName;
+        axeDamage = damage;
 
-        Debug.Log("Axe upgraded top level " +  axeLevel);
+        Debug.Log("New Axe Obtained: " + axeName);
     }
 }

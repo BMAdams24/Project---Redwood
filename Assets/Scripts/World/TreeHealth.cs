@@ -13,9 +13,14 @@ public class TreeHealth : MonoBehaviour
 
     private int currentHealth;
 
+    private JournalManager journalManager;
+
     private void Start()
     {
         currentHealth = maxHealth;
+
+        //Find the journal manager
+        journalManager = FindAnyObjectByType<JournalManager>();
     }
 
     //Damages the tree
@@ -24,6 +29,9 @@ public class TreeHealth : MonoBehaviour
         currentHealth -= damage;
 
         Debug.Log(treeName + " Health: " + currentHealth);
+
+        //Record this tree species
+        journalManager.DiscoverTree(treeName);
 
         //Check if tree was destroyed
         if (currentHealth <= 0)

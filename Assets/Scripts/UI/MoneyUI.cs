@@ -9,9 +9,12 @@ public class MoneyUI : MonoBehaviour
     //Reference to the money system
     public MoneyManager moneyManager;
 
+    //Reference to the Axe System
+    public AxeManager axeManager;
+
     private void Update()
     {
         //Update the displayed money every frame
-        moneyText.text = "Money: $" + moneyManager.money + "\nAxe LV: " + FindAnyObjectByType<AxeManager>().axeLevel;
+        moneyText.text = "Money: $" + moneyManager.money + "\nAxe: " + axeManager.currentAxeName;
     }
 }
