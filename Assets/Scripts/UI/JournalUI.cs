@@ -8,7 +8,8 @@ public class JournalUI : MonoBehaviour
     public GameObject journalPanel;
 
     //Text displayed inside the journal
-    public TextMeshProUGUI journalText;
+    public TextMeshProUGUI leftPageText;
+    public TextMeshProUGUI rightPageText;
 
     //reference to journal system
     public JournalManager journalManager;
@@ -20,6 +21,9 @@ public class JournalUI : MonoBehaviour
 
     private string[] pageNames = { "Contents", "Trees", "Locations", "Axes" };
 
+    //Currently selected tree
+    private string selectedTree = "Oak";
+
     private void Update()
     {
         //Press J to open/close journal
@@ -30,6 +34,28 @@ public class JournalUI : MonoBehaviour
 
         if (isOpen)
         {
+            //If Oak has been discovered and 1 is pressed, show the oak info on the right page
+            if (Input.GetKeyDown(KeyCode.Alpha1) && journalManager.discoveredTrees.Contains("Oak"))
+            {
+                selectedTree = "Oak";
+                UpdateJournalText();
+            }
+
+            //Same as oak but for birch
+            if (Input.GetKeyDown(KeyCode.Alpha2) && journalManager.discoveredTrees.Contains("Birch"))
+            {
+                selectedTree = "Birch";
+                UpdateJournalText();
+            }
+
+            //Same as oak but for maple
+            if (Input.GetKeyDown(KeyCode.Alpha3) && journalManager.discoveredTrees.Contains("Maple"))
+            {
+                selectedTree = "Maple";
+                UpdateJournalText();
+            }
+
+
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
                 NextPage();
@@ -50,6 +76,11 @@ public class JournalUI : MonoBehaviour
 
         if (isOpen )
         {
+            if (journalManager.discoveredTrees.Count == 0)
+            {
+                selectedTree = "";
+            }
+
             UpdateJournalText();
         }
     }
@@ -80,71 +111,107 @@ public class JournalUI : MonoBehaviour
 
     private void UpdateJournalText()
     {
-        StringBuilder journal = new StringBuilder();
+        StringBuilder leftPage = new StringBuilder();
+        StringBuilder rightPage = new StringBuilder();
 
-        journal.AppendLine("FORESTER'S JOURNAL");
-        journal.AppendLine("");
+        leftPage.AppendLine("FORESTER'S JOURNAL");
+        leftPage.AppendLine("");
 
         switch (currentPage)
         {
             case 0:
-                journal.AppendLine("This is a journal used to keep track of discoveries!");
-                journal.AppendLine("");
-                journal.AppendLine("Categories: " + "\n- Trees" + "\n- Locations" + "\n- Axes");
+                leftPage.AppendLine("This is a journal used to keep track of discoveries!");
+                leftPage.AppendLine("");
+                leftPage.AppendLine("Categories: " + "\n- Trees" + "\n- Locations" + "\n- Axes");
                 break;
 
             case 1:
-                journal.AppendLine("Category: " + pageNames[currentPage]);
+                leftPage.AppendLine("Category: " + pageNames[currentPage]);
 
-                journal.AppendLine("");
+                leftPage.AppendLine("");
 
-                journal.AppendLine("Trees Found: " + journalManager.discoveredTrees.Count + "/" + journalManager.totalTreeTypes);
+                leftPage.AppendLine("Trees Found: " + journalManager.discoveredTrees.Count + "/" + journalManager.totalTreeTypes);
 
-                journal.AppendLine("");
+                leftPage.AppendLine("");
+                leftPage.AppendLine("----------------");
+                leftPage.AppendLine("");
 
-                foreach (string tree in journalManager.discoveredTrees)
+                if (JournalDatabase.treeEntries.ContainsKey(selectedTree))
                 {
-                    journal.AppendLine("- " + tree);
+                    JournalEntry entry =
+                        JournalDatabase.treeEntries[selectedTree];
+
+                    rightPage.AppendLine(entry.title);
+                    rightPage.AppendLine("");
+
+                    rightPage.AppendLine("Base Value: $" + entry.value);
+
+                    rightPage.AppendLine("Location: " +entry.location);
+
+                    rightPage.AppendLine("Durability: " + entry.durability);
+
+                    rightPage.AppendLine("");
+
+                    rightPage.AppendLine(entry.description);
                 }
+
+                else
+                {
+                    rightPage.AppendLine("FORESTER'S NOTES");
+                    rightPage.AppendLine("");
+
+                    rightPage.AppendLine("No tree species have been " + "documented yet.");
+                    rightPage.AppendLine("");
+
+                    rightPage.AppendLine("Explore the world and discover " + "new trees to begin recording " + "information in the journal.");
+                }
+
+                    foreach (string tree in journalManager.discoveredTrees)
+                    {
+                        leftPage.AppendLine("- " + tree);
+                    }
 
                 break;
 
             case 2:
-                journal.AppendLine("Category: " + pageNames[currentPage]);
+                leftPage.AppendLine("Category: " + pageNames[currentPage]);
 
-                journal.AppendLine("");
+                leftPage.AppendLine("");
 
-                journal.AppendLine("Locations Found: " + journalManager.discoveredLocations.Count + "/" + journalManager.totallocations);
+                leftPage.AppendLine("Locations Found: " + journalManager.discoveredLocations.Count + "/" + journalManager.totallocations);
 
-                journal.AppendLine("");
+                leftPage.AppendLine("");
 
                 foreach (string location in journalManager.discoveredLocations)
                 {
-                    journal.AppendLine("- " + location);
+                    leftPage.AppendLine("- " + location);
                 }
 
                 break;
 
             case 3:
-                journal.AppendLine("Category: " + pageNames[currentPage]);
+                leftPage.AppendLine("Category: " + pageNames[currentPage]);
 
-                journal.AppendLine("");
+                leftPage.AppendLine("");
 
-                journal.AppendLine("Axes Found: " + journalManager.discoveredAxes.Count + "/" + journalManager.totalAxes);
+                leftPage.AppendLine("Axes Found: " + journalManager.discoveredAxes.Count + "/" + journalManager.totalAxes);
 
-                journal.AppendLine("");
+                leftPage.AppendLine("");
 
                 foreach (string axe in journalManager.discoveredAxes)
                 {
-                    journal.AppendLine("- " + axe);
+                    leftPage.AppendLine("- " + axe);
                 }
 
                 break;
         }
 
-        journal.AppendLine("");
-        journal.AppendLine("Use Left/Right Arrow Keys");
+        leftPage.AppendLine("");
+        leftPage.AppendLine("Press A Number to View Tree Types");
+        leftPage.AppendLine("");
+        leftPage.AppendLine("Use Left/Right Arrow Keys for next page");
 
-        journalText.text = journal.ToString();
+        leftPageText.text = leftPage.ToString();
+        rightPageText.text = rightPage.ToString();
     }
 }
