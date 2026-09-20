@@ -1,3 +1,4 @@
+using NUnit.Framework.Constraints;
 using UnityEngine;
 
 public class TreeHealth : MonoBehaviour
@@ -15,12 +16,14 @@ public class TreeHealth : MonoBehaviour
 
     private JournalManager journalManager;
 
+
     private void Start()
     {
         currentHealth = maxHealth;
 
         //Find the journal manager
         journalManager = FindAnyObjectByType<JournalManager>();
+
     }
 
     //Damages the tree
@@ -53,6 +56,9 @@ public class TreeHealth : MonoBehaviour
         {
             log.value = logValue;
             log.treeName = treeName;
+
+            Renderer treeRenderer = GetComponent<Renderer>();
+            log.woodMaterial = treeRenderer.material;
         }
     }
 }

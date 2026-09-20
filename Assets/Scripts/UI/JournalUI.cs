@@ -21,8 +21,10 @@ public class JournalUI : MonoBehaviour
 
     private string[] pageNames = { "Contents", "Trees", "Locations", "Axes" };
 
-    //Currently selected tree
-    private string selectedTree = "Oak";
+    //Currently selected
+    private string selectedTree = "";
+    private string selectedAxe = "";
+    private string selectedLocation = "";
 
     private void Update()
     {
@@ -64,6 +66,44 @@ public class JournalUI : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 PreviousPage();
+            }
+
+            //If the current page on the left is locations and a number is pressed, show the info of the location on the right
+            if (currentPage == 2)
+            {
+                if (Input.GetKeyDown(KeyCode.Alpha1) && journalManager.discoveredLocations.Contains("Starter Forest"))
+                {
+                    selectedLocation = "Starter Forest";
+                    UpdateJournalText();
+                }
+            }
+
+            //If the current page on the left is axes and a number is pressed, show the info of the axe on the right
+            if (currentPage == 3)
+            {
+                if (Input.GetKeyDown(KeyCode.Alpha1) && journalManager.discoveredAxes.Contains("Rusty Axe"))
+                {
+                    selectedAxe = "Rusty Axe";
+                    UpdateJournalText();
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha2) && journalManager.discoveredAxes.Contains("Traveler's Axe"))
+                {
+                    selectedAxe = "Traveler's Axe";
+                    UpdateJournalText();
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha3) && journalManager.discoveredAxes.Contains("Steel Axe"))
+                {
+                    selectedAxe = "Steel Axe";
+                    UpdateJournalText();
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha4) && journalManager.discoveredAxes.Contains("Forester's Axe"))
+                {
+                    selectedAxe = "Forester's Axe";
+                    UpdateJournalText();
+                }
             }
         }
     }
@@ -119,12 +159,14 @@ public class JournalUI : MonoBehaviour
 
         switch (currentPage)
         {
+            //FIRST PAGE
             case 0:
                 leftPage.AppendLine("This is a journal used to keep track of discoveries!");
                 leftPage.AppendLine("");
                 leftPage.AppendLine("Categories: " + "\n- Trees" + "\n- Locations" + "\n- Axes");
                 break;
-
+            
+            //SECOND PAGE TREES
             case 1:
                 leftPage.AppendLine("Category: " + pageNames[currentPage]);
 
@@ -136,10 +178,11 @@ public class JournalUI : MonoBehaviour
                 leftPage.AppendLine("----------------");
                 leftPage.AppendLine("");
 
+
+                //Right page
                 if (JournalDatabase.treeEntries.ContainsKey(selectedTree))
                 {
-                    JournalEntry entry =
-                        JournalDatabase.treeEntries[selectedTree];
+                    JournalEntry entry = JournalDatabase.treeEntries[selectedTree];
 
                     rightPage.AppendLine(entry.title);
                     rightPage.AppendLine("");
@@ -173,6 +216,7 @@ public class JournalUI : MonoBehaviour
 
                 break;
 
+            //THIRD PAGE LOCATIONS
             case 2:
                 leftPage.AppendLine("Category: " + pageNames[currentPage]);
 
@@ -181,6 +225,30 @@ public class JournalUI : MonoBehaviour
                 leftPage.AppendLine("Locations Found: " + journalManager.discoveredLocations.Count + "/" + journalManager.totallocations);
 
                 leftPage.AppendLine("");
+                leftPage.AppendLine("----------------");
+                leftPage.AppendLine("");
+
+                //Right page
+                if (JournalDatabase.locationEntries.ContainsKey(selectedLocation))
+                {
+                    JournalEntry entry = JournalDatabase.locationEntries[selectedLocation];
+
+                    rightPage.AppendLine(entry.title);
+                    rightPage.AppendLine("");
+
+                    rightPage.AppendLine(entry.description);
+                }
+
+                else
+                {
+                    rightPage.AppendLine("FORESTER'S NOTES");
+                    rightPage.AppendLine("");
+
+                    rightPage.AppendLine("No locations have been documented yet.");
+                    rightPage.AppendLine("");
+
+                    rightPage.AppendLine("Explore the world and discover " + "new locations to begin recording " + "information in the journal.");
+                }
 
                 foreach (string location in journalManager.discoveredLocations)
                 {
@@ -188,7 +256,8 @@ public class JournalUI : MonoBehaviour
                 }
 
                 break;
-
+        
+            //FOURTH PAGE AXES
             case 3:
                 leftPage.AppendLine("Category: " + pageNames[currentPage]);
 
@@ -197,6 +266,35 @@ public class JournalUI : MonoBehaviour
                 leftPage.AppendLine("Axes Found: " + journalManager.discoveredAxes.Count + "/" + journalManager.totalAxes);
 
                 leftPage.AppendLine("");
+                leftPage.AppendLine("----------------");
+                leftPage.AppendLine("");
+
+                //Right page
+                if (JournalDatabase.axeEntries.ContainsKey(selectedAxe))
+                {
+                    JournalEntry entry = JournalDatabase.axeEntries[selectedAxe];
+
+                    rightPage.AppendLine(entry.title);
+                    rightPage.AppendLine("");
+
+                    rightPage.AppendLine("Damage: " + entry.damage);
+                    
+                    rightPage.AppendLine("Cost: $" + entry.cost);
+                    rightPage.AppendLine("");
+
+                    rightPage.AppendLine(entry.description);
+                }
+
+                else
+                {
+                    rightPage.AppendLine("FORESTER'S NOTES");
+                    rightPage.AppendLine("");
+
+                    rightPage.AppendLine("No axes have been documented yet.");
+                    rightPage.AppendLine("");
+
+                    rightPage.AppendLine("Explore the world and discover " + "new axes to begin recording " + "information in the journal.");
+                }
 
                 foreach (string axe in journalManager.discoveredAxes)
                 {
@@ -207,7 +305,7 @@ public class JournalUI : MonoBehaviour
         }
 
         leftPage.AppendLine("");
-        leftPage.AppendLine("Press A Number to View Tree Types");
+        leftPage.AppendLine("Press a discovered entry number to view details");
         leftPage.AppendLine("");
         leftPage.AppendLine("Use Left/Right Arrow Keys for next page");
 

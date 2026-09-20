@@ -18,4 +18,10 @@ public class JournalEntry
 
     //Durability
     public int durability;
+
+    //Axe damage
+    public int damage;
+
+    //Axe cost
+    public int cost;
 }

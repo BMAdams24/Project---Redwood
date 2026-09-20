@@ -3,8 +3,8 @@ using UnityEngine;
 
 public static class JournalDatabase
 {
-    public static Dictionary<string, JournalEntry> treeEntries =
-        new Dictionary<string, JournalEntry>()
+    public static Dictionary<string, JournalEntry> treeEntries = new Dictionary<string, JournalEntry>()
+
     {
         {
             "Oak",
@@ -54,6 +54,78 @@ public static class JournalDatabase
                 value = 50,
 
                 durability = 8
+            }
+        }
+    };
+
+    public static Dictionary<string, JournalEntry> axeEntries = new Dictionary<string, JournalEntry>()
+    {
+        {
+            "Rusty Axe",
+            new JournalEntry
+            {
+                title = "Rusty Axe",
+
+                damage = 1,
+
+                cost = 0,
+
+                description = "A worn axe purchased by many newcomers.\n\nEvery forester has to start somewhere!"
+            }
+        },
+
+        {
+            "Traveler's Axe",
+            new JournalEntry
+            {
+                title = "Traveler's Axe",
+
+                damage = 2,
+
+                cost = 50,
+
+                description = "A well-maintained axe designed for constant use.\n\nPopular among travelers and merchants."
+            }
+        },
+
+        {
+            "Steel Axe",
+            new JournalEntry
+            {
+                title = "Steel Axe",
+
+                damage = 3,
+
+                cost = 150,
+
+                description = "A durable steel-bladed axe capable of handling tougher trees.\n\nMany woodcutters consider this where logging becomes truly profitable."
+            }
+        },
+
+        {
+            "Forester's Axe",
+            new JournalEntry
+            {
+                title = "Forester's Axe",
+
+                damage = 5,
+
+                cost = 400,
+
+                description = "A trusted tool carried by experienced foresters.\n\nBuilt for long days in the wilderness."
+            }
+        }
+    };
+
+    public static Dictionary<string, JournalEntry> locationEntries = new Dictionary<string, JournalEntry>()
+    {
+        {
+            "Starter Forest",
+            new JournalEntry
+            {
+                title = "Starter Forest",
+
+                description = "The first woodland beyond the village.\n\nOak, Birch, and Maple trees grow throughout this region.\n\nMost new loggers begin their journeys here!"
             }
         }
     };

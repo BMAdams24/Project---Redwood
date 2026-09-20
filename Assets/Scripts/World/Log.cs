@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Log : MonoBehaviour
@@ -7,4 +8,14 @@ public class Log : MonoBehaviour
 
     //Tyoe of tree this log came from
     public string treeName = "Unknown";
+
+    public Material woodMaterial;
+
+    private void Start()
+    {
+        if (woodMaterial != null)
+        {
+            GetComponent<Renderer>().material = woodMaterial;
+        }
+    }
 }
