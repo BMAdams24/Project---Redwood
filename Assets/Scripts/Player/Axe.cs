@@ -41,6 +41,11 @@ public class Axe : MonoBehaviour
 
             Chop();
         }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            TryRetrieve();
+        }
     }
 
     private void Chop()
@@ -58,21 +63,71 @@ public class Axe : MonoBehaviour
             }
         }
     }
-
     private void TryPickup()
     {
         Collider[] hits = Physics.OverlapSphere(transform.position, range);
 
-        foreach (Collider hit in hits)
+        foreach (Collider collider in hits)
         {
-            LogCarry log = hit.GetComponent<LogCarry>();
+            LogCarry log =
+                collider.GetComponent<LogCarry>();
 
-            if (log != null)
+            if (log == null)
             {
-                heldLog = log;
-                log.PickUp(holdPoint);
-                return;
+                continue;
             }
+
+            if (log.isStored)
+            {
+                continue;
+            }
+
+            heldLog = log;
+
+            log.PickUp(holdPoint);
+
+            return;
         }
+    }
+
+    public void ClearHeldLog(Log log)
+    {
+        LogCarry carry = log.GetComponent<LogCarry>();
+
+        if (heldLog ==  carry)
+        {
+            Debug.Log("Axe forgot held log");
+            heldLog = null;
+        }
+    }
+
+    private void TryRetrieve()
+    {
+        StorageRack rack = FindAnyObjectByType<StorageRack>();
+
+        if (rack == null)
+        {
+            return;
+        }
+
+        Log log = rack.GetStoredLog();
+
+        if (log == null)
+        {
+            return;
+        }
+
+        LogCarry carry = log.GetComponent<LogCarry>();
+
+        if (carry == null)
+        {
+            return;
+        }
+
+        rack.RetrieveLog(log);
+
+        heldLog = carry;
+
+        carry.PickUp(holdPoint);
     }
 }

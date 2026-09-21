@@ -6,6 +6,22 @@ public class LogCarry : MonoBehaviour
 
     private Transform holdPoint;
 
+    public bool isStored = false;
+
+    public bool canBeStored = true;
+
+    public Log logData;
+
+    public StorageRack currentRack;
+
+    public int rackSlot = -1;
+
+
+    private void Start()
+    {
+        logData = GetComponent<Log>();
+    }
+
     public void PickUp(Transform point)
     {
         isHeld = true;
@@ -29,6 +45,8 @@ public class LogCarry : MonoBehaviour
         {
             rb.isKinematic = false;
         }
+
+        canBeStored = true;
     }
 
     private void Update()
@@ -36,6 +54,20 @@ public class LogCarry : MonoBehaviour
         if (isHeld && holdPoint != null)
         {
             transform.position = holdPoint.position;
+        }
+    }
+
+    public void ForceDrop()
+    {
+        isHeld = false;
+
+        holdPoint = null;
+
+        Rigidbody rb = GetComponent<Rigidbody>();
+
+        if (rb != null)
+        {
+            rb.isKinematic = false;
         }
     }
 }
